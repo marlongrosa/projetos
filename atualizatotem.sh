@@ -1,3 +1,4 @@
+#!/bin/bash
 # sudo wget --inet4-only -O- https://raw.githubusercontent.com/marlongrosa/projetos/main/atualizatotem.sh | bash
 log() 
 {
@@ -7,17 +8,23 @@ log()
 }
 
 # Versions
-VsOsInterface="2.24.0"
-VsAutoPagSE="2.22.8"
+VsOsInterface="2.23.5"
+VsAutoPagSE="2.29.0"
 #VsPrint="2.18.0"
 VsFoodLauncher="2.0.0"
+# Output
+killall chrome
+wget --inet4-only -c https://images.food.vsd.app/uploads/10075/advertising/2024/05/09/8645317ab77b45f7.gif
+google-chrome --password-store=basic --kiosk --disable-pinch 8645317ab77b45f7.gif &>/dev/null &
 
 # Prepare
 sudo rm /var/lib/dpkg/lock-frontend
 sudo rm /var/lib/dpkg/lock
 sudo ufw disable
 sudo modprobe usbcore autosuspend=-1
-sudo snap remove brave
+xfconf-query -c xfwm4 -p /general/use_compositing -s false
+sudo apt install intel-media-va-driver -y
+# sudo snap remove brave
 # sudo apt remove google-chrome-stable -y
 
 log "Parando serviços..."
@@ -45,9 +52,7 @@ wget --inet4-only -c https://cdn.vsd.app/softwares/vs-os-interface/$VsOsInterfac
 log "Download VS Autopag S.E...." 
 wget --inet4-only -c https://cdn.vsd.app/softwares/vs-autopag-se/$VsAutoPagSE/vs-autopag-se_$VsAutoPagSE'_amd64.deb'
 log "Download VS Food Launcher...." 
-wget --inet4-only -c https://github.com/marlongrosa/projetos/raw/main/vs-food-launcher_2.0.0_amd64.deb
-log "Download Google Chrome Beta...."
-wget --inet4-only -c https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+wget --inet4-only -c https://github.com/wilker-santos/VSDImplantUpdater/raw/main/vs-food-launcher_2.0.0_amd64.deb
 
 # Install packages
 log "Instalando VS Autopag S.E...."
@@ -56,14 +61,21 @@ log "Instalando VS OS Interface...."
 sudo dpkg -i vs-os-interface_$VsOsInterface'_amd64.deb'
 log "Instalando VS Food Launcher...."
 sudo dpkg -i vs-food-launcher_2.0.0_amd64.deb
+log "Download Google Chrome...."
+wget --inet4-only -c https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 log "Instalando Google Chrome...."
 sudo dpkg -i google-chrome-stable_current_amd64.deb
-
-# IF Chrome Beta
-# log "Ajustando script vs-food"
-# wget --inet4-only -c https://raw.githubusercontent.com/wilker-santos/VSDImplantUpdater/main/vs-food.sh
-# sudo mv vs-food.sh /opt/videosoft/vs-food-launcher/app/vs-food.sh
-
+# Caminho para o script
+SCRIPT_PATH="/opt/videosoft/vs-food-launcher/app/vs-food.sh"
+# Verifica se o script está usando o chromium
+if grep -q "chromium \"$VS_URL_APP\" $PARAMS" "$SCRIPT_PATH"; then
+    echo "Alterando de chromium para google-chrome..."
+    # Substitui 'chromium' por 'google-chrome'
+    sudo sed -i 's/chromium "$VS_URL_APP" $PARAMS/google-chrome "$VS_URL_APP" $PARAMS/g' "$SCRIPT_PATH"
+    echo "Alteração concluída."
+else
+    echo "O script já está usando o google-chrome."
+fi
 log "Removendo arquivos temporários...."
 # Remove packages
 rm *.deb
@@ -89,3 +101,4 @@ sleep 1
 echo "Reiniciando Terminal em 0..."
 sleep 1
 reboot
+EOF
