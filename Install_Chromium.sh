@@ -1,6 +1,8 @@
 #!/bin/bash
-# sudo wget -O- https://raw.githubusercontent.com/marlongrosa/projetos/main/Install_Chromium.sh | bash
-sudo apt install chromium-browser -y
+# sudo wget -O- https://raw.githubusercontent.com/marlongrosa/projetos/main/installTV.sh | bash
 
-wget -c "https://raw.githubusercontent.com/marlongrosa/projetos/main/vs-food.sh"
-sudo mv vs-food.sh /opt/videosoft/vs-food-launcher/app/vs-food.sh
+systemctl stop teamviewerd
+sudo rm -rf /etc/machine-id && sudo systemd-machine-id-setup
+teamviewer --daemon start
+exit
+teamviewer
