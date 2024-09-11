@@ -16,7 +16,8 @@ sudo rm -rf /var/lib/anydesk/service.conf
 sudo rm -rf /etc/anydesk/service.conf
 
 # Aceitar automaticamente os termos do TeamViewer
-sudo teamviewer --daemon stop
+sudo apt install teamviewer
+sudo teamviewer --daemon start
 sudo teamviewer --accept-license
 
 # Configurar o TeamViewer para iniciar junto com o sistema operacional
