@@ -2,20 +2,32 @@
 # sudo wget -O- https://raw.githubusercontent.com/marlongrosa/projetos/main/installTV.sh | bash
 
 # Parar o serviço do TeamViewer
+echo "Parando o serviço do TeamViewer..."
 sudo systemctl stop teamviewerd
 
-# Remover e reconfigurar o machine-id
-sudo rm -rf /etc/machine-id
+# Remover o machine-id e configurá-lo novamente
+echo "Removendo o machine-id e recriando-o..."
+sudo rm -f /etc/machine-id
 sudo systemd-machine-id-setup
 
-# Instalar novo TeamViewer
+# Remover arquivos de configuração específicos do TeamViewer
+echo "Limpando configurações antigas do TeamViewer..."
+sudo rm -rf /var/lib/teamviewer/config/global.conf
+sudo rm -rf /var/lib/dbus/machine-id
+sudo dbus-uuidgen --ensure=/var/lib/dbus/machine-id
+
+# Atualizar lista de pacotes
+echo "Atualizando a lista de pacotes..."
 sudo apt update
 
-# Baixa o TV
-wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
+# Baixar e instalar o TeamViewer
+echo "Baixando e instalando a versão mais recente do TeamViewer..."
+wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb -O /tmp/teamviewer_amd64.deb
+sudo apt install -y /tmp/teamviewer_amd64.deb
 
-# Instala o TV Baixado
-sudo apt install ./teamviewer_amd64.deb
+# Remover o pacote baixado
+rm /tmp/teamviewer_amd64.deb
 
-# Reinicia a maquina
+# Reiniciar o sistema
+echo "Reiniciando o sistema para aplicar mudanças..."
 sudo reboot
