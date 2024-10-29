@@ -4,30 +4,18 @@
 # Parar o serviço do TeamViewer
 sudo systemctl stop teamviewerd
 
-# Parar o serviço do AnyDesk
-sudo systemctl stop anydesk
-
 # Remover e reconfigurar o machine-id
 sudo rm -rf /etc/machine-id
 sudo systemd-machine-id-setup
 
-# Remover o ID do AnyDesk
-sudo rm -rf /var/lib/anydesk/service.conf
-sudo rm -rf /etc/anydesk/service.conf
+# Instalar novo TeamViewer
+sudo apt update
 
-# Aceitar automaticamente os termos do TeamViewer
-sudo apt install teamviewer
-sudo teamviewer --daemon start
-sudo teamviewer --accept-license
+# Baixa o TV
+wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
 
-# Configurar o TeamViewer para iniciar junto com o sistema operacional
-sudo systemctl enable teamviewerd
+# Instala o TV Baixado
+sudo apt install ./teamviewer_amd64.deb
 
-# Configurar o AnyDesk para iniciar junto com o sistema operacional
-sudo systemctl enable anydesk
-
-# Iniciar o serviço do TeamViewer
-sudo systemctl start teamviewerd
-
-# Iniciar o serviço do AnyDesk
-sudo systemctl start anydesk
+# Reinicia a maquina
+sudo reboot
