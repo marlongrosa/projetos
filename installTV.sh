@@ -9,6 +9,7 @@ sudo systemctl stop teamviewerd
 echo "Removendo o machine-id e recriando-o..."
 sudo rm -f /etc/machine-id
 sudo systemd-machine-id-setup
+sudo teamviewer --daemon stop
 
 # Remover arquivos de configuração específicos do TeamViewer
 echo "Limpando configurações antigas do TeamViewer..."
@@ -30,6 +31,9 @@ sudo apt update
 echo "Baixando e instalando a versão mais recente do TeamViewer..."
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb -O /tmp/teamviewer_amd64.deb
 sudo apt install -y /tmp/teamviewer_amd64.deb
+sudo teamviewer --daemon start
+sudo teamviewer --accept-license
+sudo systemctl enable teamviewerd
 
 # Remover o pacote baixado
 rm /tmp/teamviewer_amd64.deb
