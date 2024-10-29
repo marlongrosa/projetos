@@ -13,6 +13,12 @@ sudo systemd-machine-id-setup
 # Remover arquivos de configuração específicos do TeamViewer
 echo "Limpando configurações antigas do TeamViewer..."
 sudo rm -rf /var/lib/teamviewer/config/global.conf
+sudo rm -rf /var/lib/teamviewer/config/client.conf
+sudo rm -rf ~/.config/teamviewer
+sudo rm -rf /etc/teamviewer
+
+# Remover e recriar o UUID do D-Bus, que também influencia o ID do TeamViewer
+echo "Regenerando o UUID do D-Bus..."
 sudo rm -rf /var/lib/dbus/machine-id
 sudo dbus-uuidgen --ensure=/var/lib/dbus/machine-id
 
