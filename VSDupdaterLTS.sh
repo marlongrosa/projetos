@@ -9,7 +9,7 @@ log()
 
 # Versions
 VsOsInterface="2.28.2"
-VsAutoPagSE="2.32.2"
+VsAutoPagSE="2.33.2"
 #VsPrint="2.18.0"
 VsFoodLauncher="2.0.0"
 # Output
